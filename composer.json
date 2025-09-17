@@ -1,0 +1,15 @@
+{
+  "name": "pail/template",
+  "description": "A template website.",
+  "type": "project",
+  "require": {
+    "php": ">=8.3",
+    "vlucas/phpdotenv": "^5.6",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
