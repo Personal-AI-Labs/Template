@@ -58,23 +58,16 @@ Now, open the newly created `.env` file and customize the variables if needed. T
 ```env
 # / .env
 
-# Application Environment (development or production)
+# Application Environment
 APP_ENV=development
 APP_DEBUG=true
 
-# --- For the PostgreSQL Container's Initial Setup ---
-# The official postgres image ONLY understands these specific variable names.
-POSTGRES_DB=template_db
-POSTGRES_USER=template_user
-POSTGRES_PASSWORD=secret
-
-# --- For Your PHP Application's Connection ---
-# These names should match what your Database class expects.
-DB_HOST=postgres
-DB_PORT=5432
-DB_NAME=${POSTGRES_DB}
-DB_USER=${POSTGRES_USER}
-DB_PASS=${POSTGRES_PASSWORD}
+# PostgreSQL Database Configuration
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
 ```
 
 ### 4. Build and Run the Containers
