@@ -11,17 +11,17 @@ class SettingsController extends Controller
 
     public function __construct($db)
     {
-        parent::__construct($db); // This is important!
+        parent::__construct($db);
         $this->settingsModel = new Settings($db);
     }
 
     /**
      * Displays the settings page.
+     * @throws \Exception
      */
     public function show()
     {
         $settings = $this->settingsModel->getAllSettings();
-
         $this->render('settings/index', [
             'title'    => 'Settings',
             'settings' => $settings
@@ -29,20 +29,20 @@ class SettingsController extends Controller
     }
 
     /**
-     * Handles the form submission to update settings.
+     * Handles the AJAX form submission to update settings.
      */
     public function update()
     {
-        // For simplicity, we'll update all POST data.
-        // In a real app, you'd add validation and sanitation here.
         $settingsData = $_POST;
 
         if ($this->settingsModel->updateSettings($settingsData)) {
+            // 1. Set the flash message in the session
             $this->setFlashMessage('success', 'Settings updated successfully!');
-        } else {
-            $this->setFlashMessage('error', 'There was an error updating settings.');
-        }
 
-        $this->redirect('/settings');
+            // 2. Tell the JavaScript to reload the page
+            $this->json(['success' => true, 'reload' => true]);
+        } else {
+            $this->json(['success' => false, 'message' => 'An error occurred or no changes were made.'], 400);
+        }
     }
 }

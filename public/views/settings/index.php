@@ -1,4 +1,4 @@
-<form action="/settings" method="POST">
+<form action="/settings" method="POST" id="settings-form">
     <div class="profile-grid">
         <div class="card">
             <div class="card-header">
@@ -63,6 +63,66 @@
     </div>
 
     <div class="form-actions" style="border-top: none; padding-top: 0;">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" id="settings-save-button">Save</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const settingsForm = document.getElementById('settings-form');
+        const saveButton = document.getElementById('settings-save-button');
+
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const originalButtonText = saveButton.innerHTML;
+                saveButton.disabled = true;
+                saveButton.innerHTML = 'Saving...';
+
+                const formData = new FormData(settingsForm);
+
+                fetch('/settings', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Check if the server told us to reload
+                        if (data.success && data.reload) {
+                            location.reload(); // Reload the page immediately
+                        } else {
+                            // If it's not a success/reload, show an error toast directly
+                            Toastify({
+                                text: data.message,
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545",
+                            }).showToast();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Toastify({
+                            text: "A network error occurred. Please try again.",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#dc3545",
+                        }).showToast();
+                    })
+                    .finally(() => {
+                        // This part will only run if the page doesn't reload
+                        if (saveButton) {
+                            saveButton.disabled = false;
+                            saveButton.innerHTML = originalButtonText;
+                        }
+                    });
+            });
+        }
+    });
+</script>

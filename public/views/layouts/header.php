@@ -34,11 +34,13 @@
 
 <div class="app-container">
     <main class="main-content-area">
-        <?php if ($title == 'Login' || $title == 'Register'): ?>
+        <?php /* This logic checks if you're on an auth page to apply a different layout if needed */ ?>
+        <?php if (isset($isAuthPage) && $isAuthPage): ?>
         <div class="main-content-login">
             <?php else: ?>
             <div class="main-content">
                 <?php endif; ?>
+
                 <?php if (isset($user)): ?>
                 <div class="page-header">
                     <div>
@@ -49,24 +51,48 @@
                     </div>
 
                     <div class="header-nav-actions">
-                        <nav class="main-menu">
-                            <ul>
-                                <li><a href="/" class="<?= ($title == 'Dashboard') ? 'active' : ''; ?>">Dashboard</a></li>
-                            </ul>
-                        </nav>
+                        <div class="nav-links-container" id="nav-links-container">
+                            <nav class="main-menu">
+                                <ul>
+                                    <li><a href="/" class="<?= ($title == 'Dashboard') ? 'active' : ''; ?>">Dashboard</a></li>
 
-                        <?php if (isset($user)): ?>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" aria-expanded="false">
+                                            <span>Projects</span>
+                                            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/projects/active" class="dropdown-item">Active Projects</a></li>
+                                            <li><a href="/projects/archived" class="dropdown-item">Archived</a></li>
+                                            <div class="dropdown-divider"></div>
+                                            <li><a href="/projects/new" class="dropdown-item">New Project</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <hr class="nav-separator">
+
                             <div class="profile-dropdown">
                                 <button type="button" class="profile-dropdown-toggle" id="profile-dropdown-toggle" aria-label="Account Menu">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                    <div class="profile-toggle-content">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                        </svg>
+                                        <span><?= htmlspecialchars($user->getFullName() ?? 'Account'); ?></span>
+                                    </div>
+                                    <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                                     </svg>
                                 </button>
+
                                 <div class="profile-dropdown-menu" id="profile-dropdown-menu">
                                     <div class="dropdown-header">
                                         <p class="dropdown-username"><?= htmlspecialchars($user->getFullName() ?? 'Guest User'); ?></p>
-                                        <p class="dropdown-email"><?= htmlspecialchars($user->email ?? 'Guest User'); ?></p>
+                                        <p class="dropdown-email"><?= htmlspecialchars($user->email ?? 'guest@example.com'); ?></p>
                                     </div>
                                     <a href="/profile" class="dropdown-item">My Profile</a>
                                     <a href="/settings" class="dropdown-item">Settings</a>
@@ -74,7 +100,13 @@
                                     <a href="/logout" class="dropdown-item dropdown-item-logout">Logout</a>
                                 </div>
                             </div>
-                        <?php endif; ?>
+                        </div>
+
+                        <button class="hamburger-menu" id="hamburger-menu" aria-label="Toggle menu" aria-expanded="false">
+                            <span class="hamburger-bar"></span>
+                            <span class="hamburger-bar"></span>
+                            <span class="hamburger-bar"></span>
+                        </button>
                     </div>
                 </div>
-        <?php endif; ?>
+<?php endif; ?>
