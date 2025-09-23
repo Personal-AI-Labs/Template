@@ -111,6 +111,6 @@ try {
     } else {
         // In production, show a generic error page.
         $view = new App\Core\View('errors/500');
-        $view->render();
+        $view->renderPartial();
     }
 }

@@ -47,4 +47,17 @@ class View
         echo $pageContent;
         require ROOT_PATH . '/public/views/layouts/footer.php';
     }
+
+    public function renderPartial(): void
+    {
+        if (!file_exists($this->viewFile)) {
+            // In case of an error, we don't want to throw another one.
+            // Just display a simple message.
+            echo "<h1>Error</h1><p>View file not found: {$this->viewFile}</p>";
+            return;
+        }
+
+        extract($this->data);
+        require $this->viewFile;
+    }
 }
