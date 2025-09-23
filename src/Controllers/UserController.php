@@ -18,22 +18,8 @@ class UserController extends Controller
      */
     public function __construct($db)
     {
+        parent::__construct($db);
         $this->userModel = new User($db);
-    }
-
-    /**
-     * NEW: Show the main dashboard for a logged-in user.
-     */
-    public function home()
-    {
-        // Middleware has already confirmed the user is logged in.
-        $user = $this->userModel->findById($_SESSION['user_id']);
-
-        $view = new View('home', [
-            'title' => 'Home',
-            'user' => $user
-        ]);
-        $view->render();
     }
 
     /**
@@ -41,14 +27,9 @@ class UserController extends Controller
      */
     public function profile()
     {
-        // Middleware has already confirmed the user is logged in.
-        $user = $this->userModel->findById($_SESSION['user_id']);
-
-        $view = new View('users/profile', [
-            'title' => 'My Profile',
-            'user' => $user
+        $this->render('users/profile', [
+            'title' => 'Profile',
         ]);
-        $view->render();
     }
 
     /**
@@ -76,19 +57,18 @@ class UserController extends Controller
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors['email'][] = "A valid email is required.";
 
         // Check if email is being changed to one that already exists
-        if ($data['email'] !== $currentUser['email'] && $this->userModel->findByEmail($data['email'])) {
+        if ($data['email'] !== $currentUser->email && $this->userModel->findByEmail($data['email'])) {
             $errors['email'][] = 'This email address is already in use.';
         }
 
         if (!empty($errors)) {
             // If there are errors, re-render the profile view with errors and old input
-            $view = new View('users/profile', [
+            $this->render('users/profile', [
                 'title' => 'My Profile',
                 'user' => $currentUser, // The original user data
                 'errors' => $errors,     // The validation errors
                 'input' => $data         // The submitted form data to repopulate fields
             ]);
-            $view->render();
             return; // Stop execution
         }
 

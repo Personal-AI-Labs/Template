@@ -62,7 +62,7 @@ $router->post('/reset-password', 'PasswordResetController@handleReset');
 // The 'auth' middleware protects all routes in this group.
 // It will redirect any guest trying to access them to the '/login' page.
 $router->group(['middleware' => 'auth'], function($router) {
-    $router->get('/', 'PageController@home');
+    $router->get('/', 'DashboardController@home');
     $router->get('/profile', 'UserController@profile');
     $router->post('/profile', 'UserController@updateProfile');
     $router->get('/logout', 'AuthController@logout');

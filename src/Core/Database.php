@@ -89,6 +89,37 @@ class Database {
     }
 
     /**
+     * Fetches a single record from the database as a standard generic object.
+     *
+     * @param string $sql The SQL query.
+     * @param array $params The parameters to bind to the query.
+     * @return object|false The record as an object, or false if not found.
+     */
+    public function fetchOneObject(string $sql, array $params = []): object|false
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetch(\PDO::FETCH_OBJ);
+    }
+
+    /**
+     * Fetches a single record and populates an instance of a given class.
+     *
+     * @param string $sql The SQL query.
+     * @param string $className The name of the class to instantiate.
+     * @param array $params The parameters to bind to the query.
+     * @return mixed An instance of the class, or false if not found.
+     */
+    public function fetchIntoClass(string $sql, string $className, array $params = []): mixed
+    {
+        $stmt = $this->pdo->prepare($sql);
+        // Tell PDO to return a new instance of the specified class
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, $className, [$this]);
+        $stmt->execute($params);
+        return $stmt->fetch();
+    }
+
+    /**
      * Executes a prepared statement for INSERT, UPDATE, or DELETE.
      */
     public function execute($sql, $params = []) {

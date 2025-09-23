@@ -10,6 +10,73 @@ body, html {
     height: 100%;
 }
 
+/* --- Typography --- */
+h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #2c3e50; }
+h2 { font-size: 2rem; margin-bottom: 0.5rem; color: #2c3e50; }
+h3 { font-size: 1.75rem; margin-bottom: 0.5rem; color: #2c3e50; }
+h4 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #2c3e50; }
+h5 { font-size: 1.25rem; margin-bottom: 0.5rem; color: #2c3e50; }
+h6 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
+
+p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+strong {
+    font-weight: 700;
+}
+
+em {
+    font-style: italic;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 87.5%;
+    color: #e83e8c;
+    background-color: #f8f9fa;
+    padding: .2em .4em;
+    border-radius: .25rem;
+}
+
+blockquote {
+    background-color: #f8f8f8;
+    border-left: 5px solid #007bff;
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    font-style: italic;
+    color: #555;
+    line-height: 1.7;
+    border-radius: 0 5px 5px 0; /* Slightly rounded right corners */
+    position: relative; /* For potential future additions like a quote icon */
+}
+
+ blockquote {
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+}
+
+blockquote footer {
+    margin-top: 0.8rem;
+    font-style: normal;
+    color: #777;
+    font-size: 0.9em;
+}
+
+blockquote footer cite {
+    font-style: normal; /* Override italic for cite */
+    font-weight: bold;
+}
+
 /* =============================================
    2. MAIN LAYOUT
    ============================================= */
@@ -103,24 +170,128 @@ body, html {
     gap: 0.5rem; /* Space between buttons if you add more */
 }
 
-.btn-logout {
-    display: inline-flex;
+.header-nav-actions {
+    display: flex;
     align-items: center;
-    gap: 0.5rem; /* Space between icon and text */
-    background-color: #f8f9fa;
-    color: #6c757d;
-    border: 1px solid #dee2e6;
-    padding: .375rem .75rem; /* Same as btn-sm */
-    font-size: 0.875rem;
+    gap: 2rem; /* Space between menu and logout button */
 }
 
-.btn-logout:hover {
-    background-color: #e9ecef;
-    border-color: #ced4da;
-    color: #495057;
-    /* Override the default blue shadow and transform for a more subtle effect */
-    box-shadow: none;
-    transform: none;
+.main-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none; /* Remove bullet points */
+    display: flex; /* Align menu items horizontally */
+    gap: 1rem; /* Space between menu items */
+}
+
+.main-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.main-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+.main-menu a.active {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-dropdown-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: #6c757d;
+    transition: background-color 0.2s ease;
+}
+
+.profile-dropdown-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+.profile-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px); /* Position below the icon with a 10px gap */
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    min-width: 220px;
+    z-index: 1000;
+
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+/* Class added by JavaScript to show the menu */
+.profile-dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-header p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.dropdown-username {
+    font-weight: 600;
+    color: #333;
+}
+
+.dropdown-email {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    text-decoration: none;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 0.5rem 0;
+}
+
+.dropdown-item-logout {
+    color: #dc3545; /* Red color for emphasis */
 }
 
 /* --- Cards --- */
@@ -149,39 +320,76 @@ body, html {
 }
 
 /* --- Buttons --- */
-.btn, .btn-sm, .btn-secondary {
-    display: inline-block;
-    padding: .5rem 1rem;
-    border-radius: 4px;
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Inter', sans-serif; /* Add this line */
+    font-weight: 500; /* Change from 600 to 500 */
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
     border: 1px solid transparent;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover state - lifts the button and adds a stronger shadow */
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Active state - provides feedback when clicking */
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Primary Button (Blue) */
+.btn-primary {
     background-color: #007bff;
     color: white;
-    font-weight: 500;
-    transition: all 0.2s ease;
 }
 
-.btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+.btn-primary:hover {
+    background-color: #0069d9; /* Darker blue on hover */
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
 }
 
-.btn-sm {
-    padding: .375rem .75rem;
-    font-size: 0.875rem;
-    margin-left: 0.25rem;
-}
-
+/* Secondary Button (Grey) */
 .btn-secondary {
     background-color: #6c757d;
-    border-color: #6c757d;
+    color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #5a6268;
-    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+    background-color: #5a6268; /* Darker grey on hover */
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.25);
+}
+
+/* Light Button (replaces .btn-logout for reusability) */
+.btn-light {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border: 1px solid #dee2e6;
+}
+
+.btn-light:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+/* Small Button Variant */
+.btn-sm {
+    padding: .4rem .8rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
 }
 
 /* --- Alerts & States --- */

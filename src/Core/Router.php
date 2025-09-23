@@ -145,7 +145,7 @@ class Router {
     private function handleNotFound() {
         http_response_code(404);
         // Assuming you have a 404 view file
-        $view = new View('errors/404');
+        $view = new View('errors/404', ['title' => 'Page Not Found']);
         $view->render();
     }
 }

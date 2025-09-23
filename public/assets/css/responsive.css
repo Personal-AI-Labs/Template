@@ -43,6 +43,18 @@
         justify-content: flex-end;
     }
 
+    .header-nav-actions {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 1.5rem;
+    }
+
+    .main-menu ul {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+
     .details-list li {
         flex-direction: column;
         align-items: flex-start;

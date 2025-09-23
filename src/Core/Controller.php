@@ -2,12 +2,62 @@
 
 namespace App\Core;
 
+use App\Models\User; // ADDED: So the controller can use the User model
+use App\Core\View;   // ADDED: So the controller can create View objects
+
 /**
  * The base Controller class.
  * Provides common helper methods for all controllers.
  */
 abstract class Controller
 {
+    /**
+     * The database connection instance.
+     * @var mixed
+     */
+    protected $db;
+
+    /**
+     * The currently logged-in user object, or null if no one is logged in.
+     * @var object|null
+     */
+    protected ?object $user = null;
+
+    /**
+     * ADDED: The Controller constructor.
+     *
+     * This now runs for any controller that extends this class. It handles
+     * fetching the authenticated user automatically.
+     *
+     * @param mixed $db The database wrapper instance, passed from the Router.
+     */
+    public function __construct($db)
+    {
+        $this->db = $db;
+
+        // If a user is logged in, fetch their full user object
+        if ($this->isLoggedIn()) {
+            $userModel = new User($this->db);
+            $this->user = $userModel->findById($_SESSION['user_id']);
+        }
+    }
+
+    /**
+     * This automatically passes the user object to every view,
+     * so you don't have to do it manually in every controller method.
+     *
+     * @param string $viewName The name of the view file (e.g., 'home').
+     * @param array $data      Optional data to pass to the view.
+     */
+    protected function render(string $viewName, array $data = []): void
+    {
+        // Automatically merge the user object into the data passed to the view
+        $viewData = array_merge($data, ['user' => $this->user]);
+
+        $view = new View($viewName, $viewData);
+        $view->render();
+    }
+
     /**
      * Helper method to redirect to a different page.
      *
@@ -41,7 +91,6 @@ abstract class Controller
      */
     protected function setFlashMessage(string $type, string $message): void
     {
-        // Ensure flash session array exists
         if (!isset($_SESSION['flash'])) {
             $_SESSION['flash'] = [];
         }

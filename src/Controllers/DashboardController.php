@@ -8,16 +8,16 @@ use App\Core\View;
 /**
  * Handles requests for static pages like the homepage.
  */
-class PageController extends Controller
+class DashboardController extends Controller
 {
+
     /**
-     * PageController constructor.
-     * Receives the database connection from the Router, even if not used,
-     * to maintain a consistent structure with other controllers.
+     * DashboardController constructor.
+     * Receives the database connection and instantiates the User model.
      */
     public function __construct($db)
     {
-        // We receive the $db instance but may not need to use it for simple pages.
+        parent::__construct($db);
     }
 
     /**
@@ -27,11 +27,12 @@ class PageController extends Controller
     {
         // Data to pass to the view
         $data = [
-            'title' => 'Welcome to the Template'
+            'title' => 'Dashboard',
         ];
 
         // Create a new View instance and render it
-        $view = new View('home', $data);
-        $view->render();
+        $this->render('home', [
+            'title' => 'Dashboard'
+        ]);
     }
 }

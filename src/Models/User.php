@@ -1,49 +1,62 @@
 <?php
 
-// 1. Declare that this class belongs to the App\Models namespace
 namespace App\Models;
 
-// 2. Import the global PDO class
 use App\Core\Database;
-use PDO;
 
-class User {
+class User
+{
     /**
-     * @var PDO The database connection object.
+     * @var Database The database connection object.
      */
     protected Database $db;
+
+    // --- Public properties to hold user data ---
+    public $id;
+    public $email;
+    public $first_name;
+    public $last_name;
+    public $avatar;
+    public $role;
+    public $is_active;
+    public $timezone;
+    public $email_verified_at;
+    public $created_at;
+    public $updated_at;
 
     /**
      * User constructor.
      * @param Database $db The database connection instance.
      */
-    public function __construct(Database $db) {
+    public function __construct(Database $db)
+    {
         $this->db = $db;
     }
 
     /**
-     * Finds a user by their unique ID. Does not select the password hash.
+     * Finds a user by their unique ID and returns a User object.
      *
      * @param string $id The UUID of the user.
-     * @return mixed The user record as an associative array, or false if not found.
+     * @return self|false A User object instance, or false if not found.
      */
-    public function findById($id) {
-        // Excludes sensitive fields like password and tokens
+    public function findById($id): self|false
+    {
         $sql = "SELECT id, email, first_name, last_name, avatar, role, is_active, timezone, email_verified_at, created_at, updated_at 
                 FROM users 
                 WHERE id = ?";
-        return $this->db->fetchOne($sql, [$id]);
+        return $this->db->fetchIntoClass($sql, self::class, [$id]);
     }
 
     /**
-     * Finds an active user by their email. Used for login.
+     * Finds an active user by email and returns a User object.
      *
      * @param string $email The email address of the user.
-     * @return mixed The full user record (including password hash), or false if not found.
+     * @return self|false A User object instance, or false if not found.
      */
-    public function findByEmail($email) {
+    public function findByEmail($email): self|false
+    {
         $sql = "SELECT * FROM users WHERE email = ? AND is_active = true";
-        return $this->db->fetchOne($sql, [$email]);
+        return $this->db->fetchIntoClass($sql, self::class, [$email]);
     }
 
     /**
@@ -52,7 +65,8 @@ class User {
      * @param array $data Associative array of user data (email, password, first_name, last_name).
      * @return array|false An array containing the new user's ID and token, or false on failure.
      */
-    public function create($data) {
+    public function create($data): array|false
+    {
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
         $verificationToken = bin2hex(random_bytes(32));
 
@@ -76,13 +90,13 @@ class User {
 
     /**
      * Updates an existing user's information.
-     * Note: `updated_at` is handled automatically by the database trigger.
      *
      * @param string $id The UUID of the user to update.
      * @param array $data Associative array of data to update.
      * @return bool True on success, false on failure.
      */
-    public function update($id, $data) {
+    public function update($id, $data): bool
+    {
         $setClauses = [];
         $params = [];
 
@@ -107,13 +121,24 @@ class User {
     }
 
     /**
+     * Concatenates first and last names for a user instance.
+     *
+     * @return string The full name of the user.
+     */
+    public function getFullName(): string
+    {
+        return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+    }
+
+    /**
      * Verifies a user's password against the stored hash.
      *
      * @param string $password The plain-text password to verify.
      * @param string $hash The stored password hash from the database.
      * @return bool True if the password is correct, false otherwise.
      */
-    public function verifyPassword($password, $hash) {
+    public function verifyPassword($password, $hash): bool
+    {
         return password_verify($password, $hash);
     }
 
@@ -123,7 +148,8 @@ class User {
      * @param string $token The email verification token.
      * @return bool True on success, false if token is invalid or user already verified.
      */
-    public function verifyEmailByToken($token) {
+    public function verifyEmailByToken($token): bool
+    {
         $sql = "UPDATE users
                 SET email_verified_at = NOW(), email_verification_token = NULL
                 WHERE email_verification_token = ? AND email_verified_at IS NULL
@@ -138,11 +164,11 @@ class User {
      * Sets a password reset token for a user.
      *
      * @param string $email The user's email address.
-     * @return mixed The token string on success, false on failure (user not found).
+     * @return string|false The token string on success, false on failure (user not found).
      */
-    public function generatePasswordResetToken($email) {
+    public function generatePasswordResetToken($email): string|false
+    {
         $token = bin2hex(random_bytes(32));
-        // Use DateTime for safer date manipulation
         $expiryTime = (new \DateTime('+1 hour'))->format('Y-m-d H:i:s');
 
         $sql = "UPDATE users
@@ -162,7 +188,8 @@ class User {
      * @param string $newPassword The new plain-text password.
      * @return bool True on success, false if token is invalid or expired.
      */
-    public function resetPassword($token, $newPassword) {
+    public function resetPassword($token, $newPassword): bool
+    {
         $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
 
         $sql = "UPDATE users
@@ -188,12 +215,10 @@ class User {
     {
         $hash = $this->db->fetchColumn("SELECT password FROM users WHERE id = ?", [$userId]);
 
-        // If no hash is found for the user, return false
         if (!$hash) {
             return false;
         }
 
-        // Use password_verify to securely compare the password to the hash
         return password_verify($password, $hash);
     }
 }
