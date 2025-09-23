@@ -17,6 +17,9 @@ class AuthController extends Controller
     /** @var User The user model instance. */
     private User $userModel;
 
+    /** @var Settings The settings model instance. */
+    private Settings $settingsModel;
+
     /**
      * AuthController constructor.
      * 2. UPDATED: Receives the database connection via Dependency Injection from the Router.
@@ -28,6 +31,7 @@ class AuthController extends Controller
         // We no longer need parent::__construct() for the database connection.
         parent::__construct($db);
         $this->userModel = new User($db);
+        $this->settingsModel = new Settings($db);
     }
 
     /**
@@ -39,7 +43,12 @@ class AuthController extends Controller
             $this->redirect('/');
         }
 
-        $view = new View('auth/login', ['title' => 'Login']);
+        $data = [
+            'title' => 'Login',
+            'settings' => $this->settings
+        ];
+
+        $view = new View('auth/login', $data);
         $view->render();
     }
 
@@ -95,7 +104,12 @@ class AuthController extends Controller
             $this->redirect('/');
         }
 
-        $view = new View('auth/register', ['title' => 'Register']);
+        $data = [
+            'title' => 'Register',
+            'settings' => $this->settings
+        ];
+
+        $view = new View('auth/register', $data);
         $view->render();
     }
 

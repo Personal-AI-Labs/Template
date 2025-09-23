@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Models\User;
 use App\Models\Settings;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * The base Controller class.
@@ -53,7 +54,8 @@ abstract class Controller
      * so you don't have to do it manually in every controller method.
      *
      * @param string $viewName The name of the view file (e.g., 'home').
-     * @param array $data      Optional data to pass to the view.
+     * @param array $data Optional data to pass to the view.
+     * @throws \Exception
      */
     protected function render(string $viewName, array $data = []): void
     {
@@ -71,7 +73,7 @@ abstract class Controller
      *
      * @param string $url The URL to redirect to.
      */
-    protected function redirect(string $url): void
+    #[NoReturn] protected function redirect(string $url): void
     {
         header('Location: ' . $url);
         exit();

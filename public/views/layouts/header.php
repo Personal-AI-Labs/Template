@@ -7,19 +7,30 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
     <link rel="manifest" href="/assets/images/site.webmanifest">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
+    <?php if (isset($settings['base_font']) && $settings['base_font'] !== 'System'): ?>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=<?= urlencode($settings['base_font']) ?>:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <?php endif; ?>
 
-    <title><?= htmlspecialchars($settings['site_name'] ?? 'My App') ?> | <?= htmlspecialchars($title ?? 'Template'); ?></title>
+    <title><?= htmlspecialchars($title ?? 'Page'); ?> | <?= htmlspecialchars($settings['site_name'] ?? 'My App'); ?></title>
 
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/responsive.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.css" integrity="sha512-kT0v1BxcibEO2Yc+6Z3W1gNsN+2cZ/U6uITqHhIJl8SAvt9vpO8llugdCPXA7cCnp8G1xbuSqHNMRaR3Zlz9yA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <style>
+        :root {
+            /* Color Variables */
+            --primary-color: <?= htmlspecialchars($settings['theme_color'] ?? '#007bff'); ?>;
+            --primary-color-darker: <?= htmlspecialchars(adjustBrightness($settings['theme_color'] ?? '#007bff', -20)); ?>;
+
+            /* Font Variable */
+            --font-family-base: <?= getFontFamily($settings['base_font'] ?? 'System'); ?>;
+        }
+    </style>
 </head>
-<body>
+<body class="<?= htmlspecialchars($settings['theme_mode'] ?? 'light') ?>-theme density-<?= htmlspecialchars($settings['layout_density'] ?? 'comfortable') ?>">
 
 <div class="app-container">
     <main class="main-content-area">

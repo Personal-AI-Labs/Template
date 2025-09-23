@@ -1,45 +1,68 @@
-<div class="card">
-    <div class="card-header">
-        <h2>General</h2>
+<form action="/settings" method="POST">
+    <div class="profile-grid">
+        <div class="card">
+            <div class="card-header">
+                <h2>General Settings</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="site_name">Site Name</label>
+                    <input type="text" id="site_name" name="site_name" class="form-control"
+                           value="<?= htmlspecialchars($settings['site_name'] ?? 'My App') ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="maintenance_mode">Maintenance Mode</label>
+                    <select id="maintenance_mode" name="maintenance_mode" class="form-control">
+                        <option value="false" <?= ($settings['maintenance_mode'] ?? 'false') == 'false' ? 'selected' : '' ?>>Off</option>
+                        <option value="true" <?= ($settings['maintenance_mode'] ?? 'false') == 'true' ? 'selected' : '' ?>>On (Site disabled for non-admins)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Styling Options</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="theme_color">Primary Theme Color</label>
+                    <input type="color" id="theme_color" name="theme_color" class="form-control"
+                           value="<?= htmlspecialchars($settings['theme_color'] ?? '#007bff') ?>">
+                    <small>Used for primary buttons, links, and accents.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="theme_mode">Theme Mode</label>
+                    <select id="theme_mode" name="theme_mode" class="form-control">
+                        <option value="light" <?= ($settings['theme_mode'] ?? 'light') == 'light' ? 'selected' : '' ?>>Light</option>
+                        <option value="dark" <?= ($settings['theme_mode'] ?? 'light') == 'dark' ? 'selected' : '' ?>>Dark</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="layout_density">Layout Density</label>
+                    <select id="layout_density" name="layout_density" class="form-control">
+                        <option value="comfortable" <?= ($settings['layout_density'] ?? 'comfortable') == 'comfortable' ? 'selected' : '' ?>>Comfortable</option>
+                        <option value="compact" <?= ($settings['layout_density'] ?? 'comfortable') == 'compact' ? 'selected' : '' ?>>Compact</option>
+                    </select>
+                    <small>Adjusts spacing and padding throughout the site.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="base_font">Base Font</label>
+                    <select id="base_font" name="base_font" class="form-control">
+                        <option value="Inter" <?= ($settings['base_font'] ?? 'Inter') == 'Inter' ? 'selected' : '' ?>>Inter (Modern)</option>
+                        <option value="Roboto" <?= ($settings['base_font'] ?? 'Inter') == 'Roboto' ? 'selected' : '' ?>>Roboto (Classic)</option>
+                        <option value="System" <?= ($settings['base_font'] ?? 'Inter') == 'System' ? 'selected' : '' ?>>System Default</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <form action="/settings" method="POST">
 
-            <div class="form-group">
-                <label for="site_name">Site Name</label>
-                <input type="text" id="site_name" name="site_name" class="form-control"
-                       value="<?= htmlspecialchars($settings['site_name'] ?? 'My App') ?>">
-            </div>
-
-            <div class="form-group">
-                <label for="maintenance_mode">Maintenance Mode</label>
-                <select id="maintenance_mode" name="maintenance_mode" class="form-control">
-                    <option value="false" <?= ($settings['maintenance_mode'] ?? 'false') == 'false' ? 'selected' : '' ?>>Off</option>
-                    <option value="true" <?= ($settings['maintenance_mode'] ?? 'false') == 'true' ? 'selected' : '' ?>>On (Site disabled for non-admins)</option>
-                </select>
-            </div>
-
-            <hr style="margin: 2rem 0;">
-
-            <div class="form-group">
-                <label for="theme_color">Primary Theme Color</label>
-                <input type="color" id="theme_color" name="theme_color" class="form-control"
-                       value="<?= htmlspecialchars($settings['theme_color'] ?? '#007bff') ?>">
-                <small>This color is used for primary buttons and links.</small>
-            </div>
-
-            <div class="form-group">
-                <label for="base_font">Base Font</label>
-                <select id="base_font" name="base_font" class="form-control">
-                    <option value="Inter" <?= ($settings['base_font'] ?? 'Inter') == 'Inter' ? 'selected' : '' ?>>Inter (Modern)</option>
-                    <option value="Roboto" <?= ($settings['base_font'] ?? 'Inter') == 'Roboto' ? 'selected' : '' ?>>Roboto (Classic)</option>
-                    <option value="System" <?= ($settings['base_font'] ?? 'Inter') == 'System' ? 'selected' : '' ?>>System Default</option>
-                </select>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save Settings</button>
-            </div>
-        </form>
+    <div class="form-actions" style="border-top: none; padding-top: 0;">
+        <button type="submit" class="btn btn-primary">Save</button>
     </div>
-</div>
+</form>

@@ -12,6 +12,7 @@ define('ROOT_PATH', dirname(__DIR__));
 // 1. Use Composer's Autoloader (Modern & Standard)
 // This handles loading all classes automatically.
 require_once ROOT_PATH . '/vendor/autoload.php';
+require_once ROOT_PATH . '/src/Utils/helpers.php';
 
 // 2. Load Environment Variables from the .env file
 // This makes configuration secure and flexible.

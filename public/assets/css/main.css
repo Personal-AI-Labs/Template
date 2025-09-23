@@ -4,7 +4,7 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-family-base);
     background-color: #f4f7f6;
     color: #333;
     height: 100%;
@@ -32,7 +32,7 @@ em {
 }
 
 a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -51,7 +51,7 @@ code {
 
 blockquote {
     background-color: #f8f8f8;
-    border-left: 5px solid #007bff;
+    border-left: 5px solid var(--primary-color);
     margin: 1.5rem 0;
     padding: 1rem 1.5rem;
     font-style: italic;
@@ -311,12 +311,12 @@ blockquote footer cite {
 
 /* Primary Button (Blue) */
 .btn-primary {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #0069d9; /* Darker blue on hover */
+    background-color: var(--primary-color-darker);
     box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
 }
 
@@ -436,7 +436,7 @@ blockquote footer cite {
 
 .form-control:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
@@ -485,7 +485,7 @@ textarea.form-control {
     padding: 2.5rem;
     width: 100%;
     max-width: 420px;
-    border-top: 4px solid #007bff;
+    border-top: 4px solid var(--primary-color);
 }
 
 .auth-card h2 {
@@ -540,7 +540,7 @@ textarea.form-control {
 }
 
 .auth-footer a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -553,4 +553,78 @@ textarea.form-control {
     display: grid;
     grid-template-columns: 1fr; /* Default to a single column */
     gap: 2rem;
+}
+
+/* =============================================
+   5. THEMES & DYNAMIC STYLES (NEW SECTION)
+   ============================================= */
+
+/* --- Dark Theme --- */
+.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+.dark-theme .main-content-area,
+.dark-theme .card,
+.dark-theme .auth-card {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+.dark-theme h1, .dark-theme h2, .dark-theme h3, .dark-theme h4, .dark-theme h5, .dark-theme h6,
+.dark-theme .form-group label{
+    color: #f5f5f5;
+}
+.dark-theme .page-header {
+    border-bottom-color: #333;
+}
+.dark-theme .main-menu a {
+    color: #e0e0e0;
+}
+.dark-theme .main-menu a:hover {
+    background-color: #333;
+}
+.dark-theme .main-menu a.active {
+    background-color: #444;
+    color: #fff;
+}
+.dark-theme .form-control {
+    background-color: #2c2c2c;
+    border-color: #444;
+    color: #f5f5f5;
+}
+.dark-theme .form-control:focus {
+    border-color: var(--primary-color);
+}
+.dark-theme .profile-dropdown-menu {
+    background-color: #2c2c2c;
+    border-color: #444;
+}
+.dark-theme .dropdown-item,
+.dark-theme .dropdown-username {
+    color: #f5f5f5;
+}
+.dark-theme .dropdown-item:hover {
+    background-color: #383838;
+}
+
+/* --- Layout Density --- */
+.density-compact .main-content {
+    padding: 1rem;
+}
+.density-compact .page-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+}
+.density-compact .card-body {
+    padding: 1rem;
+}
+.density-compact .form-group {
+    margin-bottom: 1rem;
+}
+.density-compact .form-control {
+    padding: 0.6rem 0.8rem;
+}
+.density-compact .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
 }
