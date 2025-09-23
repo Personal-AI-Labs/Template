@@ -12,17 +12,21 @@ class User
     protected Database $db;
 
     // --- Public properties to hold user data ---
-    public $id;
-    public $email;
-    public $first_name;
-    public $last_name;
-    public $avatar;
-    public $role;
-    public $is_active;
-    public $timezone;
-    public $email_verified_at;
-    public $created_at;
-    public $updated_at;
+    public string $id;
+    public string $email;
+    public string $first_name;
+    public string $last_name;
+    public ?string $avatar = null;
+    public string $role;
+    public bool $is_active;
+    public ?string $timezone = null;
+    public ?string $email_verified_at = null;
+    public string $created_at;
+    public string $updated_at;
+    public ?string $password = null;
+    public ?string $email_verification_token = null;
+    public ?string $password_reset_token = null;
+    public ?string $password_reset_expires_at = null;
 
     /**
      * User constructor.

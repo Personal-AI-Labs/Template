@@ -47,14 +47,8 @@ $router->group(['middleware' => 'guest'], function($router) {
     $router->post('/login', 'AuthController@login');
     $router->get('/register', 'AuthController@showRegister');
     $router->post('/register', 'AuthController@register');
+    $router->get('/verify-email', 'AuthController@verifyEmail');
 });
-
-// These must be public so users can receive the email and click the link.
-$router->get('/verify-email', 'AuthController@verifyEmail'); // Expects ?token=...
-$router->get('/forgot-password', 'PasswordResetController@showRequestForm');
-$router->post('/forgot-password', 'PasswordResetController@handleRequest');
-$router->get('/reset-password', 'PasswordResetController@showResetForm'); // Expects ?token=...
-$router->post('/reset-password', 'PasswordResetController@handleReset');
 
 
 // --- PROTECTED ROUTES (for logged-in users) ---
@@ -63,13 +57,39 @@ $router->post('/reset-password', 'PasswordResetController@handleReset');
 // It will redirect any guest trying to access them to the '/login' page.
 $router->group(['middleware' => 'auth'], function($router) {
     $router->get('/', 'DashboardController@home');
+
+    $router->get('/logout', 'AuthController@logout');
+
     $router->get('/profile', 'UserController@profile');
     $router->post('/profile', 'UserController@updateProfile');
-    $router->get('/logout', 'AuthController@logout');
     $router->post('/profile/password', 'UserController@updatePassword');
-    $router->get('/logout', 'AuthController@logout');
+
+    $router->get('/settings', 'SettingsController@show');
+    $router->post('/settings', 'SettingsController@update');
 });
 
+// =================================================================
+//  RUN GLOBAL MIDDLEWARE
+// =================================================================
+// This code runs on every request BEFORE the router dispatches.
+
+// Fetch all site settings
+$settingsModel = new App\Models\Settings($db);
+$settings = $settingsModel->getAllSettings();
+
+// Fetch the current user, if they are logged in
+$currentUser = null;
+if (isset($_SESSION['user_id'])) {
+    $userModel = new App\Models\User($db);
+    $currentUser = $userModel->findById($_SESSION['user_id']);
+}
+
+// 1. MOVE THIS LINE UP from the "DISPATCH THE ROUTER" section
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// 2. UPDATE THIS LINE to pass the $uri
+$maintenanceMiddleware = new App\Middleware\MaintenanceMiddleware();
+$maintenanceMiddleware->handle($settings, $currentUser, $uri);
 
 // =================================================================
 //  DISPATCH THE ROUTER
@@ -91,6 +111,6 @@ try {
     } else {
         // In production, show a generic error page.
         $view = new App\Core\View('errors/500');
-        $view->renderPartial();
+        $view->render();
     }
 }

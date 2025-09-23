@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
 
-    <title><?php echo htmlspecialchars($title ?? 'Template'); ?></title>
+    <title><?= htmlspecialchars($settings['site_name'] ?? 'My App') ?> | <?= htmlspecialchars($title ?? 'Template'); ?></title>
 
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/responsive.css">
@@ -28,9 +28,12 @@
             <?php else: ?>
             <div class="main-content">
                 <?php endif; ?>
-                <?php if (isset($_SESSION['user_id'])): ?>
+                <?php if (isset($user)): ?>
                 <div class="page-header">
                     <div>
+                        <span class="site-name">
+                            <?= htmlspecialchars($settings['site_name'] ?? 'My App') ?>
+                        </span>
                         <h1><?= htmlspecialchars($title ?? 'Dashboard'); ?></h1>
                     </div>
 
@@ -41,23 +44,26 @@
                             </ul>
                         </nav>
 
-                        <div class="profile-dropdown">
-                            <button type="button" class="profile-dropdown-toggle" id="profile-dropdown-toggle" aria-label="Account Menu">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                                </svg>
-                            </button>
-                            <div class="profile-dropdown-menu" id="profile-dropdown-menu">
-                                <div class="dropdown-header">
-                                    <p class="dropdown-username"><?= htmlspecialchars($user->getFullName() ?? 'Guest User'); ?></p>
-                                    <p class="dropdown-email"><?= htmlspecialchars($user->email ?? 'Guest User'); ?></p>
+                        <?php if (isset($user)): ?>
+                            <div class="profile-dropdown">
+                                <button type="button" class="profile-dropdown-toggle" id="profile-dropdown-toggle" aria-label="Account Menu">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                    </svg>
+                                </button>
+                                <div class="profile-dropdown-menu" id="profile-dropdown-menu">
+                                    <div class="dropdown-header">
+                                        <p class="dropdown-username"><?= htmlspecialchars($user->getFullName() ?? 'Guest User'); ?></p>
+                                        <p class="dropdown-email"><?= htmlspecialchars($user->email ?? 'Guest User'); ?></p>
+                                    </div>
+                                    <a href="/profile" class="dropdown-item">My Profile</a>
+                                    <a href="/settings" class="dropdown-item">Settings</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="/logout" class="dropdown-item dropdown-item-logout">Logout</a>
                                 </div>
-                                <a href="/profile" class="dropdown-item">My Profile</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="/logout" class="dropdown-item dropdown-item-logout">Logout</a>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-<?php endif; ?>
+        <?php endif; ?>

@@ -2,8 +2,8 @@
 
 namespace App\Core;
 
-use App\Models\User; // ADDED: So the controller can use the User model
-use App\Core\View;   // ADDED: So the controller can create View objects
+use App\Models\User;
+use App\Models\Settings;
 
 /**
  * The base Controller class.
@@ -24,8 +24,11 @@ abstract class Controller
     protected ?object $user = null;
 
     /**
-     * ADDED: The Controller constructor.
-     *
+     * @var array Holds all site settings.
+     */
+    protected array $settings = [];
+
+    /**
      * This now runs for any controller that extends this class. It handles
      * fetching the authenticated user automatically.
      *
@@ -40,6 +43,9 @@ abstract class Controller
             $userModel = new User($this->db);
             $this->user = $userModel->findById($_SESSION['user_id']);
         }
+
+        $settingsModel = new Settings($this->db);
+        $this->settings = $settingsModel->getAllSettings();
     }
 
     /**
@@ -51,8 +57,10 @@ abstract class Controller
      */
     protected function render(string $viewName, array $data = []): void
     {
-        // Automatically merge the user object into the data passed to the view
-        $viewData = array_merge($data, ['user' => $this->user]);
+        $viewData = array_merge($data, [
+            'user' => $this->user,
+            'settings' => $this->settings
+        ]);
 
         $view = new View($viewName, $viewData);
         $view->render();

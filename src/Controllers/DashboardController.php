@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Core\View;
 
 /**
  * Handles requests for static pages like the homepage.

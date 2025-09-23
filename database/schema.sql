@@ -22,6 +22,12 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+CREATE TABLE settings (
+    setting_key VARCHAR(255) PRIMARY KEY,
+    setting_value TEXT,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Create indexes for better performance
 CREATE INDEX idx_users_email ON users(email);
 
